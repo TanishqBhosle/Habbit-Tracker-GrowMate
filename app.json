@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "growmate",
+    "name": "GrowMate - Smart Habit Coach",
     "slug": "growmate",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,11 +20,17 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "NOTIFICATIONS"
+      ],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-notifications"
+    ]
   }
 }
