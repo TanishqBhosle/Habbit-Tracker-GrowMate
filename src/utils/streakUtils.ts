@@ -1,4 +1,4 @@
-import { Habit } from '@store/habitStore';
+import { Habit } from '../store/habitStore';
 import { getCurrentDate, isConsecutiveDay, parseDate } from './dateUtils';
 
 export const calculateStreak = (habit: Habit): { currentStreak: number; longestStreak: number; lastCompletedDate?: string } => {

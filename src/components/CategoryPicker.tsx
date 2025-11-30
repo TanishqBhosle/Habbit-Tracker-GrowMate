@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 import { HABIT_CATEGORIES } from '../utils/constants';
@@ -14,6 +14,9 @@ export const CategoryPicker: React.FC<CategoryPickerProps> = ({
   selectedCategory, 
   onSelectCategory 
 }) => {
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
+  
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Category</Text>
@@ -42,7 +45,7 @@ export const CategoryPicker: React.FC<CategoryPickerProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     marginBottom: spacing.md,
   },

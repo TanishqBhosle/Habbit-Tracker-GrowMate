@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { theme } from '../theme/colors';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 import { useHabits } from '../hooks/useHabits';
 import { AnalyticsService } from '../services/analyticsService';
-import type { Habit } from '@store/habitStore';
+import type { Habit } from '../store/habitStore';
 import { InsightCard } from '../components/InsightCard';
 import { WeeklyChart } from '../components/WeeklyChart';
 import { EmptyState } from '../components/EmptyState';
@@ -13,10 +13,13 @@ import { LoadingSpinner } from '../components/LoadingSpinner';
 
 export const InsightsScreen: React.FC = () => {
   const { habits, isLoading } = useHabits();
+  const { theme, toggleTheme, isDarkMode } = useTheme();
   const [analytics, setAnalytics] = useState<any>(null);
   
   // Ensure habits is always an array
   const safeHabits = Array.isArray(habits) ? habits : [];
+  
+  const styles = getStyles(theme);
 
   useEffect(() => {
     if (safeHabits.length > 0) {
@@ -72,7 +75,12 @@ export const InsightsScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <Text style={styles.title}>Weekly Insights</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Weekly Insights</Text>
+        <TouchableOpacity style={styles.themeToggle} onPress={toggleTheme}>
+          <Text style={styles.themeToggleText}>{isDarkMode ? '☀️' : '🌙'}</Text>
+        </TouchableOpacity>
+      </View>
       
       <View style={styles.grid}>
         <InsightCard
@@ -115,7 +123,7 @@ export const InsightsScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
@@ -123,23 +131,25 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: spacing.md,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.lg,
+  },
   title: {
     ...typography.h1,
     color: theme.colors.text,
-    marginBottom: spacing.lg,
+    marginBottom: 0,
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: spacing.lg,
-  },
-  section: {
+  themeToggle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: theme.colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    marginBottom: spacing.sm,
-    shadowColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -148,24 +158,48 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  themeToggleText: {
+    fontSize: 20,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: spacing.xl,
+  },
+  section: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: 16,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 8,
+  },
   sectionTitle: {
-    ...typography.h3,
+    ...typography.h2,
     color: theme.colors.text,
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
   },
   categoryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.background,
+    borderBottomColor: theme.colors.border,
   },
   categoryName: {
-    ...typography.bodyMedium,
+    ...typography.bodyLarge,
     color: theme.colors.text,
   },
   categoryCount: {
-    ...typography.bodyMedium,
+    ...typography.bodyLarge,
     color: theme.colors.textSecondary,
+    fontWeight: '600',
   },
 });

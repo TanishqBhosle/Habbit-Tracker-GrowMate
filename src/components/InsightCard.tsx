@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 
@@ -15,39 +15,44 @@ export const InsightCard: React.FC<InsightCardProps> = ({
   title, 
   value, 
   description,
-  color = theme.colors.primary 
+  color 
 }) => {
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      <Text style={[styles.value, { color }]}>{value}</Text>
-      {description && <Text style={styles.description}>{description}</Text>}
+      <Text style={[styles.value, { color: color || theme.colors.primary }]}>{value}</Text>
+      {description && <Text style={styles.description}>{description}</Text>
+}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     backgroundColor: theme.colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
+    borderRadius: 16,
+    padding: spacing.lg,
     marginBottom: spacing.sm,
-    shadowColor: '#000',
+    width: '48%',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowRadius: 6,
+    elevation: 8,
   },
   title: {
-    ...typography.bodyMedium,
+    ...typography.bodyLarge,
     color: theme.colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.sm,
   },
   value: {
-    ...typography.h2,
+    ...typography.h1,
     color: theme.colors.primary,
     marginBottom: spacing.xs,
   },

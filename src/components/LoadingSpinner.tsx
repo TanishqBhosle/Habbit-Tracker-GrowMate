@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 
@@ -13,6 +13,9 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   text,
   size = 'large'
 }) => {
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
+  
   return (
     <View style={styles.container}>
       <ActivityIndicator 
@@ -26,7 +29,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
-import { Habit } from '@store/habitStore';
+import { Habit } from '../store/habitStore';
 import { getCurrentDate } from '../utils/dateUtils';
 
 interface HabitCardProps {
@@ -13,6 +13,8 @@ interface HabitCardProps {
 }
 
 export const HabitCard: React.FC<HabitCardProps> = ({ habit, onPress, onToggle }) => {
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
   const isCompletedToday = habit.completedDates.includes(getCurrentDate());
   
   return (
@@ -58,20 +60,20 @@ export const HabitCard: React.FC<HabitCardProps> = ({ habit, onPress, onToggle }
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     backgroundColor: theme.colors.surface,
-    borderRadius: 12,
+    borderRadius: 16,
     borderLeftWidth: 4,
     marginBottom: spacing.sm,
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
   },
   content: {
     padding: spacing.md,
@@ -89,11 +91,11 @@ const styles = StyleSheet.create({
     marginRight: spacing.md,
   },
   checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     borderWidth: 2,
-    borderColor: theme.colors.textSecondary,
+    borderColor: theme.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -111,6 +113,7 @@ const styles = StyleSheet.create({
     ...typography.bodyMedium,
     color: theme.colors.textSecondary,
     marginBottom: spacing.md,
+    lineHeight: 20,
   },
   footer: {
     flexDirection: 'row',
@@ -118,21 +121,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   categoryContainer: {
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.backgroundSecondary,
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: 8,
+    paddingVertical: spacing.xxs,
+    borderRadius: 12,
   },
   category: {
     ...typography.caption,
     color: theme.colors.textSecondary,
     textTransform: 'capitalize',
+    fontWeight: '500',
   },
   streakContainer: {
     backgroundColor: theme.colors.warning,
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: 8,
+    paddingVertical: spacing.xxs,
+    borderRadius: 12,
   },
   streakText: {
     ...typography.caption,

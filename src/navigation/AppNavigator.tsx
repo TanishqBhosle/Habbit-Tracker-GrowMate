@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,7 +9,7 @@ import { EditHabitScreen } from '../screens/EditHabitScreen';
 import { HabitDetailScreen } from '../screens/HabitDetailScreen';
 import { InsightsScreen } from '../screens/InsightsScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { RootStackParamList, TabParamList } from './types';
 
 // Stack Navigator for Home tab
@@ -29,17 +29,34 @@ const HomeStackNavigator = () => {
 const Tab = createBottomTabNavigator<TabParamList>();
 
 export const AppNavigator: React.FC = () => {
+  const { theme } = useTheme();
+  
   return (
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: theme.colors.primary,
-          tabBarInactiveTintColor: theme.colors.textSecondary,
+          tabBarInactiveTintColor: theme.colors.textTertiary,
           tabBarStyle: {
             backgroundColor: theme.colors.surface,
             borderTopWidth: 1,
-            borderTopColor: theme.colors.background,
+            borderTopColor: theme.colors.border,
+            paddingBottom: 5,
+            paddingTop: 5,
+            height: 60,
+            shadowColor: theme.colors.shadow,
+            shadowOffset: {
+              width: 0,
+              height: -2,
+            },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 10,
+          },
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: '500',
           },
         }}
       >
@@ -49,7 +66,7 @@ export const AppNavigator: React.FC = () => {
           options={{
             title: 'Habits',
             tabBarIcon: ({ color, size }) => (
-              <Text style={{ color, fontSize: size }}>🏠</Text>
+              <Text style={{ color, fontSize: size + 4 }}>🏠</Text>
             ),
           }}
         />
@@ -59,7 +76,7 @@ export const AppNavigator: React.FC = () => {
           options={{
             title: 'Insights',
             tabBarIcon: ({ color, size }) => (
-              <Text style={{ color, fontSize: size }}>📊</Text>
+              <Text style={{ color, fontSize: size + 4 }}>📊</Text>
             ),
           }}
         />
@@ -69,7 +86,7 @@ export const AppNavigator: React.FC = () => {
           options={{
             title: 'Settings',
             tabBarIcon: ({ color, size }) => (
-              <Text style={{ color, fontSize: size }}>⚙️</Text>
+              <Text style={{ color, fontSize: size + 4 }}>⚙️</Text>
             ),
           }}
         />

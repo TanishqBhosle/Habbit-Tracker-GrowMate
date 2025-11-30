@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 import { useHabits } from '../hooks/useHabits';
 import { HabitCard } from '../components/HabitCard';
-import type { Habit } from '@store/habitStore';
+import type { Habit } from '../store/habitStore';
 import { EmptyState } from '../components/EmptyState';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 
@@ -17,9 +17,12 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 export const HomeScreen: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const { habits, isLoading, toggleHabit } = useHabits();
+  const { theme, toggleTheme, isDarkMode } = useTheme();
   
   // Ensure habits is always an array
   const safeHabits = Array.isArray(habits) ? habits : [];
+  
+  const styles = getStyles(theme);
 
   const handleAddHabit = () => {
     navigation.navigate('AddHabit');
@@ -44,10 +47,17 @@ export const HomeScreen: React.FC = () => {
         contentContainerStyle={styles.contentContainer}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>Your Habits</Text>
-          <Text style={styles.subtitle}>
-            {safeHabits.length} {safeHabits.length === 1 ? 'habit' : 'habits'}
-          </Text>
+          <View style={styles.headerTop}>
+            <View>
+              <Text style={styles.title}>Your Habits</Text>
+              <Text style={styles.subtitle}>
+                {safeHabits.length} {safeHabits.length === 1 ? 'habit' : 'habits'}
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.themeToggle} onPress={toggleTheme}>
+              <Text style={styles.themeToggleText}>{isDarkMode ? '☀️' : '🌙'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {safeHabits.length === 0 ? (
@@ -77,7 +87,7 @@ export const HomeScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
@@ -91,6 +101,11 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: spacing.lg,
   },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   title: {
     ...typography.h1,
     color: theme.colors.text,
@@ -98,6 +113,26 @@ const styles = StyleSheet.create({
   subtitle: {
     ...typography.bodyMedium,
     color: theme.colors.textSecondary,
+    marginTop: spacing.xxs,
+  },
+  themeToggle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: theme.colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  themeToggleText: {
+    fontSize: 20,
   },
   habitsContainer: {
     paddingBottom: spacing.xxl,
@@ -112,14 +147,14 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   addButtonText: {
     ...typography.h1,

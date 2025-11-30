@@ -1,17 +1,24 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { theme } from '../theme/colors';
+import Constants from 'expo-constants';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
-import { useHabitStore } from '@store/habitStore';
-import { NotificationService } from '@services/notificationService';
-import { Habit } from '@store/habitStore';
+import { useHabitStore } from '../store/habitStore';
+import { NotificationService } from '../services/notificationService';
+import { Habit } from '../store/habitStore';
+
+// Check if we're running in Expo Go
+const isExpoGo = Constants.appOwnership === 'expo';
 
 export const SettingsScreen: React.FC = () => {
   const { habits, deleteHabit } = useHabitStore();
+  const { theme } = useTheme();
   
   // Ensure habits is always an array
   const safeHabits = Array.isArray(habits) ? habits : [];
+  
+  const styles = getStyles(theme);
 
   const handleClearAllData = () => {
     Alert.alert(
@@ -24,8 +31,10 @@ export const SettingsScreen: React.FC = () => {
           style: 'destructive',
           onPress: async () => {
             try {
-              // Cancel all notifications
-              await NotificationService.cancelAllReminders();
+              // Cancel all notifications if not in Expo Go
+              if (!isExpoGo) {
+                await NotificationService.cancelAllReminders();
+              }
               
               // Delete all habits
               for (const habit of safeHabits) {
@@ -44,6 +53,15 @@ export const SettingsScreen: React.FC = () => {
   };
 
   const handleRequestNotificationPermission = async () => {
+    if (isExpoGo) {
+      Alert.alert(
+        'Notifications Not Available',
+        'Push notifications are not available in Expo Go. Use a development build to test notifications.',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+    
     const granted = await NotificationService.requestPermissions();
     if (granted) {
       Alert.alert('Success', 'Notification permission granted');
@@ -91,7 +109,7 @@ export const SettingsScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
@@ -106,32 +124,32 @@ const styles = StyleSheet.create({
   },
   section: {
     backgroundColor: theme.colors.surface,
-    borderRadius: 12,
+    borderRadius: 16,
     marginBottom: spacing.lg,
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowRadius: 6,
+    elevation: 8,
   },
   sectionTitle: {
-    ...typography.h3,
+    ...typography.h2,
     color: theme.colors.text,
-    padding: spacing.md,
-    paddingBottom: spacing.sm,
+    padding: spacing.lg,
+    paddingBottom: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.background,
+    borderBottomColor: theme.colors.border,
   },
   settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: spacing.md,
+    padding: spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.background,
+    borderBottomColor: theme.colors.border,
   },
   settingText: {
     ...typography.bodyLarge,

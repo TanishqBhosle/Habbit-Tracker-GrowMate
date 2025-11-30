@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 import { CategoryPicker } from '../components/CategoryPicker';
@@ -56,12 +56,13 @@ export const EditHabitScreen: React.FC = () => {
   const route = useRoute();
   const { habitId } = route.params as { habitId: string };
   const { habits, updateExistingHabit } = useHabits();
+  const { theme } = useTheme();
   const [customCategory, setCustomCategory] = useState('');
   
   // Ensure habits is always an array
   const safeHabits = Array.isArray(habits) ? habits : [];
 
-  const habit = safeHabits.find((h: any) => h.id === habitId);
+  const habit = safeHabits.find((h: any) => h.id === habitId) as any;
 
   const [initialValues, setInitialValues] = useState<FormValues>({
     title: '',
@@ -91,6 +92,8 @@ export const EditHabitScreen: React.FC = () => {
       }
     }
   }, [habit]);
+
+  const styles = getStyles(theme);
 
   if (!habit) {
     return (
@@ -249,7 +252,7 @@ export const EditHabitScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
@@ -266,7 +269,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
   },
   formGroup: {
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
   },
   label: {
     ...typography.bodyLarge,
@@ -280,10 +283,10 @@ const styles = StyleSheet.create({
     ...typography.bodyMedium,
     color: theme.colors.text,
     borderWidth: 1,
-    borderColor: theme.colors.background,
+    borderColor: theme.colors.border,
   },
   textArea: {
-    height: 80,
+    height: 100,
     textAlignVertical: 'top',
   },
   errorText: {
@@ -296,15 +299,18 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   frequencyButton: {
-    backgroundColor: theme.colors.background,
-    paddingHorizontal: spacing.md,
+    backgroundColor: theme.colors.backgroundSecondary,
+    paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
     borderRadius: 20,
     marginRight: spacing.sm,
     marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   selectedFrequencyButton: {
     backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
   },
   frequencyText: {
     ...typography.bodyMedium,
@@ -317,37 +323,58 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
   },
   switch: {
     width: 50,
     height: 30,
     borderRadius: 15,
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.backgroundSecondary,
     justifyContent: 'center',
     padding: spacing.xs,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   switchOn: {
     backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
   },
   switchThumb: {
     width: 24,
     height: 24,
     borderRadius: 12,
     backgroundColor: theme.colors.surface,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 2,
   },
   switchThumbOn: {
     alignSelf: 'flex-end',
   },
   submitButton: {
     backgroundColor: theme.colors.primary,
-    padding: spacing.md,
+    padding: spacing.lg,
     borderRadius: 12,
     alignItems: 'center',
-    marginTop: spacing.lg,
+    marginTop: spacing.xl,
+    marginBottom: spacing.lg,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 5,
   },
   submitButtonText: {
     ...typography.h3,
     color: theme.colors.surface,
+    fontWeight: '600',
   },
 });

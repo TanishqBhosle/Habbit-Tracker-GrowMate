@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 
@@ -15,6 +15,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   description,
   icon
 }) => {
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
+  
   return (
     <View style={styles.container}>
       {icon && <Text style={styles.icon}>{icon}</Text>}
@@ -24,7 +27,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',

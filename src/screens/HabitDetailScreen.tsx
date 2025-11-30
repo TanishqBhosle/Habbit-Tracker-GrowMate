@@ -4,11 +4,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
 import type { RootStackParamList } from '../navigation/types';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 import { useHabits } from '../hooks/useHabits';
-import type { Habit } from '@store/habitStore';
+import type { Habit } from '../store/habitStore';
 import { StreakBadge } from '../components/StreakBadge';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { getCurrentDate } from '../utils/dateUtils';
@@ -21,9 +21,12 @@ export const HabitDetailScreen: React.FC = () => {
   const route = useRoute<HabitDetailScreenRouteProp>();
   const { habitId } = route.params;
   const { habits, toggleHabit, deleteExistingHabit } = useHabits();
+  const { theme } = useTheme();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const habit = habits.find((h: Habit) => h.id === habitId);
+  
+  const styles = getStyles(theme);
 
   if (!habit) {
     return (
@@ -161,7 +164,7 @@ export const HabitDetailScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
@@ -174,18 +177,18 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: theme.colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    borderLeftWidth: 4,
+    borderRadius: 16,
+    padding: spacing.lg,
+    borderLeftWidth: 6,
     marginBottom: spacing.lg,
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowRadius: 6,
+    elevation: 8,
   },
   title: {
     ...typography.h1,
@@ -198,16 +201,17 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   section: {
-    marginBottom: spacing.lg,
+    marginBottom: spacing.xl,
   },
   sectionTitle: {
-    ...typography.h3,
+    ...typography.h2,
     color: theme.colors.text,
     marginBottom: spacing.md,
   },
   description: {
     ...typography.bodyMedium,
     color: theme.colors.textSecondary,
+    lineHeight: 22,
   },
   progressContainer: {
     flexDirection: 'row',
@@ -223,14 +227,30 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
   statItem: {
     alignItems: 'center',
     flex: 1,
+    minWidth: 100,
+    backgroundColor: theme.colors.surface,
+    padding: spacing.md,
+    borderRadius: 12,
+    marginHorizontal: spacing.xs,
+    marginBottom: spacing.xs,
+    shadowColor: theme.colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   statValue: {
     ...typography.h1,
     color: theme.colors.primary,
+    marginBottom: spacing.xxs,
   },
   statLabel: {
     ...typography.bodySmall,
@@ -240,26 +260,32 @@ const styles = StyleSheet.create({
   reminderText: {
     ...typography.bodyMedium,
     color: theme.colors.textSecondary,
+    backgroundColor: theme.colors.surface,
+    padding: spacing.md,
+    borderRadius: 12,
   },
   actionButtonsContainer: {
     flexDirection: 'row',
     padding: spacing.md,
     backgroundColor: theme.colors.surface,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.background,
+    borderTopColor: theme.colors.border,
   },
   actionButton: {
     flex: 1,
     padding: spacing.md,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: 'center',
     marginHorizontal: spacing.xs,
   },
   toggleButton: {
     backgroundColor: theme.colors.background,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   toggleButtonActive: {
     backgroundColor: theme.colors.success,
+    borderColor: theme.colors.success,
   },
   toggleButtonActiveText: {
     color: theme.colors.surface,

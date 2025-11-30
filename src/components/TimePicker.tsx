@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 
@@ -13,6 +13,8 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   selectedTime, 
   onTimeChange 
 }) => {
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
   const [showPicker, setShowPicker] = useState(false);
   
   const hours = Array.from({ length: 24 }, (_, i) => i);
@@ -92,7 +94,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     marginBottom: spacing.md,
   },

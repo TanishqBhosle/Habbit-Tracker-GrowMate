@@ -1,4 +1,4 @@
-import { Habit } from '@store/habitStore';
+import { Habit } from '../store/habitStore';
 import { getCurrentDate, getStartOfWeek, getWeekDates } from '../utils/dateUtils';
 
 export interface WeeklyAnalytics {

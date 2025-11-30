@@ -1,30 +1,17 @@
-import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
-import { Habit } from '@store/habitStore';
+import { Habit } from '../store/habitStore';
 
-// Set notification handler
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+// Check if we're running in Expo Go
+const isExpoGo = Constants.appOwnership === 'expo';
 
 export class NotificationService {
   static async requestPermissions(): Promise<boolean> {
+    // Skip if in Expo Go
+    if (isExpoGo) return false;
+    
     try {
-      // Check if we're running in Expo Go
-      const isExpoGo = Constants.appOwnership === 'expo';
-      
-      if (isExpoGo) {
-        console.warn('Push notifications are not available in Expo Go. Use a development build instead.');
-        return false;
-      }
-      
+      const Notifications = await import('expo-notifications');
       const { status } = await Notifications.requestPermissionsAsync();
       return status === 'granted';
     } catch (error) {
@@ -34,7 +21,11 @@ export class NotificationService {
   }
 
   static async createChannel(): Promise<void> {
+    // Skip channel creation in Expo Go
+    if (isExpoGo) return;
+    
     if (Platform.OS === 'android') {
+      const Notifications = await import('expo-notifications');
       await Notifications.setNotificationChannelAsync('habit-reminders', {
         name: 'Habit Reminders',
         importance: Notifications.AndroidImportance.MAX,
@@ -45,7 +36,11 @@ export class NotificationService {
   }
 
   static async scheduleHabitReminder(habit: Habit): Promise<string | null> {
+    // Skip scheduling in Expo Go
+    if (isExpoGo) return null;
+    
     try {
+      const Notifications = await import('expo-notifications');
       // Cancel any existing notifications for this habit
       await this.cancelHabitReminder(habit.id);
       
@@ -56,8 +51,8 @@ export class NotificationService {
       const [hours, minutes] = habit.reminderTime.split(':').map(Number);
       
       // Create a daily repeating trigger
-      const trigger: Notifications.DailyTriggerInput = {
-        type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      const trigger: any = {
+        type: 'daily',
         hour: hours,
         minute: minutes,
       };
@@ -79,7 +74,11 @@ export class NotificationService {
   }
 
   static async cancelHabitReminder(habitId: string): Promise<void> {
+    // Skip cancellation in Expo Go
+    if (isExpoGo) return;
+    
     try {
+      const Notifications = await import('expo-notifications');
       // Get all scheduled notifications
       const scheduled = await Notifications.getAllScheduledNotificationsAsync();
       
@@ -95,14 +94,18 @@ export class NotificationService {
   }
 
   static async cancelAllReminders(): Promise<void> {
+    // Skip cancellation in Expo Go
+    if (isExpoGo) return;
+    
     try {
+      const Notifications = await import('expo-notifications');
       await Notifications.cancelAllScheduledNotificationsAsync();
     } catch (error) {
       console.error('Error canceling all reminders:', error);
     }
   }
 
-  static async handleNotificationResponse(response: Notifications.NotificationResponse): Promise<void> {
+  static async handleNotificationResponse(response: any): Promise<void> {
     const habitId = response.notification.request.content.data?.habitId;
     if (habitId) {
       // Handle navigation to habit detail screen

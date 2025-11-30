@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 
@@ -10,6 +10,9 @@ interface StreakBadgeProps {
 }
 
 export const StreakBadge: React.FC<StreakBadgeProps> = ({ streak, size = 'large' }) => {
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
+  
   if (streak === 0) return null;
   
   return (
@@ -21,7 +24,7 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({ streak, size = 'large'
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     backgroundColor: theme.colors.warning,
     paddingHorizontal: spacing.md,

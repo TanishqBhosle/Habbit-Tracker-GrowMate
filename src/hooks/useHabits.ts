@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useHabitStore } from '@store/habitStore';
-import type { Habit } from '@store/habitStore';
+import { useHabitStore } from '../store/habitStore';
+import type { Habit } from '../store/habitStore';
 import { calculateStreak, shouldResetStreak } from '../utils/streakUtils';
 import { getCurrentDate } from '../utils/dateUtils';
 

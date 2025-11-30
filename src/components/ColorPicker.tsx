@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { theme } from '../theme/colors';
+import { useTheme } from '../theme/ThemeContext';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
 import { HABIT_COLORS } from '../utils/constants';
@@ -14,6 +14,9 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   selectedColor, 
   onSelectColor 
 }) => {
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
+  
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Color</Text>
@@ -38,7 +41,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
   container: {
     marginBottom: spacing.md,
   },
