@@ -226,5 +226,8 @@ Pull requests are welcome!
 
 This project is licensed under the **MIT License**.
 
+---
 
-Just tell me!
+##  **Figma WireFrame**
+https://www.figma.com/board/PshQdJSefQ9pF7xUR0qjgn/GrowMate-Flowchart-Updated?node-id=0-1&p=f&t=zldjn0r87IxeG4QE-0
+
