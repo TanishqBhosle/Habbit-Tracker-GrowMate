@@ -121,27 +121,6 @@ npm install zustand
 
 ---
 
-## 📁 **Project Structure**
-
-```
-growmate/
- ├── App.tsx
- ├── app.json
- ├── babel.config.js
- ├── tsconfig.json
- ├── src/
- │   ├── components/
- │   ├── screens/
- │   ├── navigation/
- │   ├── store/
- │   ├── services/
- │   ├── hooks/
- │   ├── utils/
- │   └── theme/
- └── assets/
-```
-
----
 
 ## ▶️ **Running the App**
 
@@ -198,29 +177,6 @@ No data is transmitted, collected, or shared with external servers.
 
 ---
 
-## 🎥 **Recording a Demo Video**
-
-1. Open the app
-2. Create a few habits
-3. Mark habits as complete
-4. Show streak increments
-5. Display weekly insights
-6. Demonstrate notifications
-7. Use your device’s built-in screen recorder
-
----
-
-## 🤝 **Contributing**
-
-Pull requests are welcome!
-
-1. Fork the repo
-2. Create your feature branch
-3. Commit changes
-4. Push to branch
-5. Submit PR
-
----
 
 ## 📜 **License**
 
@@ -230,4 +186,5 @@ This project is licensed under the **MIT License**.
 
 ##  **Figma WireFrame**
 https://www.figma.com/board/PshQdJSefQ9pF7xUR0qjgn/GrowMate-Flowchart-Updated?node-id=0-1&p=f&t=zldjn0r87IxeG4QE-0
+
 
