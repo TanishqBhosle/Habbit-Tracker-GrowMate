@@ -15,6 +15,12 @@ A beautifully crafted, offline-first habit tracking app built with **React Nativ
 
 ---
 
+## 🎥 Demo Video
+
+Click the link below to watch the demo:
+
+👉 [Watch Demo Video](https://drive.google.com/file/d/1ml5LpSThxG49IB4qV7FcDfHMQ80QUFck/view?usp=sharing)
+
 ## ✨ **Features**
 
 ### 📌 Habit Management
@@ -186,5 +192,6 @@ This project is licensed under the **MIT License**.
 
 ##  **Figma WireFrame**
 https://www.figma.com/board/PshQdJSefQ9pF7xUR0qjgn/GrowMate-Flowchart-Updated?node-id=0-1&p=f&t=zldjn0r87IxeG4QE-0
+
 
 
